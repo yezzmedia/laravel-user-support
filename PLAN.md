@@ -16,12 +16,56 @@ vor UserSupport's `packageBooted()` als Singleton gebunden sein.
 | `boot()` | `packageBooted()` seedt Default-Links + registriert `$app->booted()`-Callback für sealing | `packageBooted()` ruft `injectBottomBarLinks()` auf → 4 Links werden hinzugefügt |
 | `$app->booted()` | Registry wird versiegelt (`seal()`) | — |
 
-### Voraussetzung
+### Architectural Decision: Kein Interface-Extract
 
-- Dashboard muss **vor** UserSupport in der Service-Provider-Liste stehen, damit
-  `BottomBarLinkRegistry::class` während UserSupport's `registeringPackage()` bereits existiert.
-- Die Guard `$this->app->bound(BottomBarLinkRegistry::class)` verhindert Abstürze, falls
-  Dashboard nicht installiert ist (Graceful Degradation).
+Nach Analyse der tatsächlichen Dependencies und Consumer:
+
+**Abhängigkeitsgraph (Stand heute):**
+```
+UserSupport  ──require──> Dashboard (BottomBarLinkRegistry, hard dep)
+UserSupport  ──require──> Account   (AccountPage, hard dep)
+Account      ──class_exists──> Dashboard (fakultativ: @includeIf + conditional menu-item)
+Account      ──require──> Foundation
+UserConsent  ──suggest──> Dashboard (BottomBarLink via config, optional)
+UserConsent  ──suggest──> Account   (Sidebarlink via config, optional)
+```
+
+### Dependency-Audit (18.06.2026)
+
+| Package | require (yezzmedia) | Fehlt? |
+|---------|--------------------|--------|
+| `laravel-foundation` | — | ✅ sauber |
+| `laravel-dashboard` | foundation | ✅ sauber |
+| `laravel-account` | foundation | ⚠️ Dashboard nur suggest, obwohl `class_exists` + `@includeIf` verwendet |
+| `laravel-user-support` | **account**, dashboard, foundation | ✅ **Fix: account war fälschlich nicht in require — ergänzt** |
+| `laravel-user-consent` | foundation | ⚠️ Dashboard + Account nur suggest, obwohl BottomBarLink + SidebarLink injiziert (via Config-Manipulation) |
+
+**Empfehlung:** user-consent sollte auf Registry-Pattern umgestellt werden und dafür
+`laravel-dashboard` sowie `laravel-account` als require bekommen.
+
+### Architectural Decision: Kein Interface-Extract
+
+Nach Analyse der tatsächlichen Dependencies und Consumer:
+- Account hat kein Hard-Dependency auf Dashboard → wer BottomBarLinks injecten will, muss Dashboard
+  explizit requiren
+- UserSupport hat `laravel-dashboard: ^0.1` bereits als Hard-Dependency → das Registry ist garantiert
+  verfügbar
+- `class_exists()`-Guards auf allen Ebenen verhindern Crashs bei fehlendem Dashboard
+- Erst bei 4+ Consumern lohnt sich ein formales Interface
+
+### Abweichendes Pattern in laravel-user-consent — Broken
+
+`laravel-user-consent` manipuliert `config('dashboard.legal')` direkt (nicht `BottomBarLinkRegistry::add()`)
+und registriert den Callback in `$app->booted()` (nicht `packageBooted()`).
+
+**Problem:** Dashboard liest `config('dashboard.legal')` ebenfalls in `$app->booted()` und
+versiegelt danach das Registry. Da Dashboard seinen Callback vor user-consent registriert, läuft
+Dashboard's Callback zuerst → Config wird gelesen und Registry versiegelt. User-consent modifiziert
+die Config danach, aber Dashboard hat sie bereits konsumiert. **Der BottomBarLink von user-consent
+wird also nie gerendert.**
+
+**Fix:** user-consent müsste auf `BottomBarLinkRegistry::add()` in `packageBooted()` umgestellt werden
+(wie UserSupport), und `laravel-dashboard` von `suggest` auf `require` wechseln.
 
 ### Tests (3 Tests, 18 Assertions)
 
