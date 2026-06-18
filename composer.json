@@ -31,7 +31,8 @@
     },
     "autoload": {
         "psr-4": {
-            "YezzMedia\\UserSupport\\": "src/"
+            "YezzMedia\\UserSupport\\": "src/",
+            "YezzMedia\\UserSupport\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
