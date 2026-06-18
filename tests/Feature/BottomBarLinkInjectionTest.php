@@ -44,13 +44,13 @@ final class BottomBarLinkInjectionTest extends UserSupportTestCase
         $this->assertStringContainsString('/account/support', $config['left'][0]['url']);
 
         $this->assertSame('Impressum', $config['right'][0]['label']);
-        $this->assertStringContainsString('/account/impressum', $config['right'][0]['url']);
+        $this->assertStringContainsString('/account/legal-impressum', $config['right'][0]['url']);
 
         $this->assertSame('Datenschutz', $config['right'][1]['label']);
-        $this->assertStringContainsString('/account/privacy', $config['right'][1]['url']);
+        $this->assertStringContainsString('/account/legal-privacy', $config['right'][1]['url']);
 
         $this->assertSame('AGB', $config['right'][2]['label']);
-        $this->assertStringContainsString('/account/terms', $config['right'][2]['url']);
+        $this->assertStringContainsString('/account/legal-terms', $config['right'][2]['url']);
     }
 
     #[Test]

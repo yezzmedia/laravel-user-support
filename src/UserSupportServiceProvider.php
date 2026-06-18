@@ -69,21 +69,21 @@ class UserSupportServiceProvider extends PackageServiceProvider
 
         $registry->add(new BottomBarLink(
             label: __('user-support::user-support.bottom_bar_impressum'),
-            url: url('/account/impressum'),
+            url: url('/account/legal-impressum'),
             section: 'right',
             sort: 30,
         ));
 
         $registry->add(new BottomBarLink(
             label: __('user-support::user-support.bottom_bar_privacy'),
-            url: url('/account/privacy'),
+            url: url('/account/legal-privacy'),
             section: 'right',
             sort: 40,
         ));
 
         $registry->add(new BottomBarLink(
             label: __('user-support::user-support.bottom_bar_terms'),
-            url: url('/account/terms'),
+            url: url('/account/legal-terms'),
             section: 'right',
             sort: 50,
         ));

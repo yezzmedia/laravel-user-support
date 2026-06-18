@@ -13,9 +13,9 @@ return [
     ],
 
     'legal' => [
-        'impressum' => ['enabled' => true, 'route' => '/impressum'],
-        'privacy' => ['enabled' => true, 'route' => '/datenschutz'],
-        'terms' => ['enabled' => true, 'route' => '/agb'],
+        'legal-impressum' => ['enabled' => true, 'route' => '/rechtliches/impressum'],
+        'legal-privacy' => ['enabled' => true, 'route' => '/rechtliches/datenschutz'],
+        'legal-terms' => ['enabled' => true, 'route' => '/rechtliches/agb'],
     ],
 
 ];

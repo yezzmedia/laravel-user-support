@@ -12,8 +12,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use YezzMedia\UserSupport\Models\LegalContent;
@@ -36,9 +37,9 @@ final class LegalContentEditPage extends Page implements HasForms
 
     public LegalContent $record;
 
-    public function mount(string $record): void
+    public function mount(LegalContent $record): void
     {
-        $this->record = LegalContent::findOrFail((int) $record);
+        $this->record = $record;
         $this->form->fill($this->record->toArray());
     }
 
@@ -47,10 +48,10 @@ final class LegalContentEditPage extends Page implements HasForms
         return Gate::check('support.manage');
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('key')
                     ->label('Page Key')
                     ->required()
@@ -92,7 +93,10 @@ final class LegalContentEditPage extends Page implements HasForms
 
         $this->record->refresh();
 
-        $this->notify('success', 'Legal content saved.');
+        Notification::make()
+            ->title('Legal content saved.')
+            ->success()
+            ->send();
     }
 
     protected function getHeaderActions(): array
@@ -102,7 +106,7 @@ final class LegalContentEditPage extends Page implements HasForms
                 ->label('Back to list')
                 ->icon('heroicon-o-arrow-left')
                 ->color('gray')
-                ->url(LegalContentListPage::getUrl()),
+                ->url(LegalContentListPage::getUrl(panel: 'ops')),
             Action::make('save')
                 ->label('Save')
                 ->icon('heroicon-o-check')

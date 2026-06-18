@@ -6,11 +6,12 @@ namespace YezzMedia\UserSupport\Pages;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use YezzMedia\Account\Pages\AccountPage;
+use YezzMedia\Account\Support\AccountManager;
 use YezzMedia\UserSupport\Support\LegalContentManager;
 
 class PrivacyPage extends AccountPage
 {
-    protected static ?string $slug = 'privacy';
+    protected static ?string $slug = 'legal-privacy';
 
     protected string $view = 'user-support::account.privacy';
 
@@ -21,6 +22,11 @@ class PrivacyPage extends AccountPage
     protected static \BackedEnum|string|null $navigationIcon = 'shield-check';
 
     protected static ?int $navigationSort = 20;
+
+    protected function getViewData(): array
+    {
+        return $this->pageData(app(AccountManager::class)->currentUser());
+    }
 
     protected function getPageTitle(): string
     {

@@ -68,7 +68,7 @@ final class TicketDetailPage extends Page
                 ->label('Back to list')
                 ->icon('heroicon-o-arrow-left')
                 ->color('gray')
-                ->url(TicketListPage::getUrl()),
+                ->url(TicketListPage::getUrl(panel: 'ops')),
         ];
     }
 

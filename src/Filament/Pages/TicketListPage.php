@@ -95,7 +95,7 @@ final class TicketListPage extends Page implements HasTable
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-o-eye')
-                    ->url(fn ($record): string => TicketDetailPage::getUrl(['ticket' => $record['id']])),
+                    ->url(fn ($record): string => TicketDetailPage::getUrl(['ticket' => $record['id']], panel: 'ops')),
             ])
             ->bulkActions([])
             ->emptyStateHeading('No tickets yet.')

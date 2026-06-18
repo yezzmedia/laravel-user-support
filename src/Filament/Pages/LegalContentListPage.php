@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace YezzMedia\UserSupport\Filament\Pages;
 
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Pages\Page;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -76,8 +76,10 @@ final class LegalContentListPage extends Page implements HasTable
                     ->sortable(),
             ])
             ->actions([
-                EditAction::make()
-                    ->url(fn (LegalContent $record): string => LegalContentEditPage::getUrl(['record' => $record->id])),
+                Action::make('edit')
+                    ->label('Edit')
+                    ->icon('heroicon-o-pencil-square')
+                    ->url(fn (LegalContent $record): string => LegalContentEditPage::getUrl(['record' => $record->id], panel: 'ops')),
             ])
             ->bulkActions([])
             ->emptyStateHeading('No legal content yet.')

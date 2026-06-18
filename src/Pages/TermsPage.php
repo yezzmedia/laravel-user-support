@@ -6,11 +6,12 @@ namespace YezzMedia\UserSupport\Pages;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use YezzMedia\Account\Pages\AccountPage;
+use YezzMedia\Account\Support\AccountManager;
 use YezzMedia\UserSupport\Support\LegalContentManager;
 
 class TermsPage extends AccountPage
 {
-    protected static ?string $slug = 'terms';
+    protected static ?string $slug = 'legal-terms';
 
     protected string $view = 'user-support::account.terms';
 
@@ -21,6 +22,11 @@ class TermsPage extends AccountPage
     protected static \BackedEnum|string|null $navigationIcon = 'scale';
 
     protected static ?int $navigationSort = 30;
+
+    protected function getViewData(): array
+    {
+        return $this->pageData(app(AccountManager::class)->currentUser());
+    }
 
     protected function getPageTitle(): string
     {
