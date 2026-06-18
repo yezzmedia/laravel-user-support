@@ -18,10 +18,14 @@ use YezzMedia\Foundation\Data\PackageMetadata;
 use YezzMedia\Foundation\Data\PermissionDefinition;
 use YezzMedia\Foundation\Doctor\DoctorCheck;
 use YezzMedia\Foundation\Install\InstallStep;
+use YezzMedia\UserSupport\Doctor\LegalContentSeedCheck;
+use YezzMedia\UserSupport\Doctor\LegalSchemaReadyCheck;
 use YezzMedia\UserSupport\Doctor\SupportConfigPublishedCheck;
 use YezzMedia\UserSupport\Doctor\SupportSchemaReadyCheck;
+use YezzMedia\UserSupport\Install\EnsureLegalSchemaReadyInstallStep;
 use YezzMedia\UserSupport\Install\EnsureSupportSchemaReadyInstallStep;
 use YezzMedia\UserSupport\Install\PublishSupportConfigInstallStep;
+use YezzMedia\UserSupport\Install\SeedLegalContentInstallStep;
 
 final class UserSupportPlatformPackage implements DefinesAuditEvents, DefinesInstallSteps, DefinesPermissions, PlatformPackage, ProvidesDoctorChecks, ProvidesOpsModules, RegistersFeatures
 {
@@ -76,6 +80,13 @@ final class UserSupportPlatformPackage implements DefinesAuditEvents, DefinesIns
                 type: 'page',
                 permissionHint: 'support.manage',
             ),
+            new OpsModuleDefinition(
+                key: 'support.legal',
+                package: 'yezzmedia/laravel-user-support',
+                label: 'Legal Content',
+                type: 'page',
+                permissionHint: 'support.manage',
+            ),
         ];
     }
 
@@ -87,6 +98,8 @@ final class UserSupportPlatformPackage implements DefinesAuditEvents, DefinesIns
         return [
             app(PublishSupportConfigInstallStep::class),
             app(EnsureSupportSchemaReadyInstallStep::class),
+            app(EnsureLegalSchemaReadyInstallStep::class),
+            app(SeedLegalContentInstallStep::class),
         ];
     }
 
@@ -98,6 +111,8 @@ final class UserSupportPlatformPackage implements DefinesAuditEvents, DefinesIns
         return [
             app(SupportConfigPublishedCheck::class),
             app(SupportSchemaReadyCheck::class),
+            app(LegalSchemaReadyCheck::class),
+            app(LegalContentSeedCheck::class),
         ];
     }
 }

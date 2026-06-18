@@ -6,6 +6,7 @@ namespace YezzMedia\UserSupport\Pages;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use YezzMedia\Account\Pages\AccountPage;
+use YezzMedia\UserSupport\Support\LegalContentManager;
 
 class ImpressumPage extends AccountPage
 {
@@ -23,7 +24,9 @@ class ImpressumPage extends AccountPage
 
     protected function getPageTitle(): string
     {
-        return 'Impressum';
+        $manager = app(LegalContentManager::class);
+
+        return $manager->title('impressum') ?? 'Impressum';
     }
 
     protected function getPageDescription(): string
@@ -33,6 +36,11 @@ class ImpressumPage extends AccountPage
 
     protected function pageData(?Authenticatable $user = null): array
     {
-        return [];
+        $manager = app(LegalContentManager::class);
+
+        return [
+            'content' => $manager->content('impressum'),
+            'title' => $manager->title('impressum') ?? 'Impressum',
+        ];
     }
 }

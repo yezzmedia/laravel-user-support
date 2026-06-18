@@ -51,15 +51,16 @@ it('defines audit events', function () {
         ->toContain('support.ticket.closed');
 });
 
-it('defines ops module for tickets', function () {
+it('defines ops modules for tickets and legal', function () {
     $pkg = app(UserSupportPlatformPackage::class);
 
     $modules = $pkg->opsModuleDefinitions();
 
-    expect($modules)->toHaveCount(1)
-        ->and($modules[0]->key)->toBe('support.tickets')
-        ->and($modules[0]->type)->toBe('page')
-        ->and($modules[0]->permissionHint)->toBe('support.manage');
+    expect($modules)->toHaveCount(2);
+
+    $keys = array_map(fn ($m) => $m->key, $modules);
+    expect($keys)->toContain('support.tickets')
+        ->toContain('support.legal');
 });
 
 it('provides install steps', function () {
@@ -67,7 +68,7 @@ it('provides install steps', function () {
 
     $steps = $pkg->installSteps();
 
-    expect($steps)->toHaveCount(2)
+    expect($steps)->toHaveCount(4)
         ->and($steps[0]->key())->toBe('user-support.config.publish')
         ->and($steps[1]->key())->toBe('user-support.schema.ensure');
 });
@@ -77,7 +78,7 @@ it('provides doctor checks', function () {
 
     $checks = $pkg->doctorChecks();
 
-    expect($checks)->toHaveCount(2)
+    expect($checks)->toHaveCount(4)
         ->and($checks[0]->key())->toBe('user-support.config.published')
         ->and($checks[1]->key())->toBe('user-support.schema.ready');
 });

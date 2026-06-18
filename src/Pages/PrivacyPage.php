@@ -6,6 +6,7 @@ namespace YezzMedia\UserSupport\Pages;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use YezzMedia\Account\Pages\AccountPage;
+use YezzMedia\UserSupport\Support\LegalContentManager;
 
 class PrivacyPage extends AccountPage
 {
@@ -23,7 +24,9 @@ class PrivacyPage extends AccountPage
 
     protected function getPageTitle(): string
     {
-        return 'Datenschutzerklärung';
+        $manager = app(LegalContentManager::class);
+
+        return $manager->title('privacy') ?? 'Datenschutzerklärung';
     }
 
     protected function getPageDescription(): string
@@ -33,6 +36,11 @@ class PrivacyPage extends AccountPage
 
     protected function pageData(?Authenticatable $user = null): array
     {
-        return [];
+        $manager = app(LegalContentManager::class);
+
+        return [
+            'content' => $manager->content('privacy'),
+            'title' => $manager->title('privacy') ?? 'Datenschutzerklärung',
+        ];
     }
 }

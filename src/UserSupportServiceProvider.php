@@ -9,6 +9,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 use YezzMedia\Dashboard\Navigation\BottomBarLink;
 use YezzMedia\Dashboard\Navigation\BottomBarLinkRegistry;
 use YezzMedia\Foundation\Support\PlatformPackageRegistrar;
+use YezzMedia\UserSupport\Support\LegalContentManager;
 use YezzMedia\UserSupport\Support\SupportTicketManager;
 
 class UserSupportServiceProvider extends PackageServiceProvider
@@ -21,7 +22,8 @@ class UserSupportServiceProvider extends PackageServiceProvider
             ->hasViews()
             ->hasTranslations()
             ->hasMigration('0001_create_support_tickets_table')
-            ->hasMigration('0002_create_support_ticket_replies_table');
+            ->hasMigration('0002_create_support_ticket_replies_table')
+            ->hasMigration('0003_create_legal_contents_table');
     }
 
     public function registeringPackage(): void
@@ -36,6 +38,7 @@ class UserSupportServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->singleton(SupportTicketManager::class);
+        $this->app->singleton(LegalContentManager::class);
     }
 
     public function packageBooted(): void

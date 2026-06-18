@@ -6,6 +6,7 @@ namespace YezzMedia\UserSupport\Pages;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use YezzMedia\Account\Pages\AccountPage;
+use YezzMedia\UserSupport\Support\LegalContentManager;
 
 class TermsPage extends AccountPage
 {
@@ -23,7 +24,9 @@ class TermsPage extends AccountPage
 
     protected function getPageTitle(): string
     {
-        return 'AGB';
+        $manager = app(LegalContentManager::class);
+
+        return $manager->title('terms') ?? 'AGB';
     }
 
     protected function getPageDescription(): string
@@ -33,6 +36,11 @@ class TermsPage extends AccountPage
 
     protected function pageData(?Authenticatable $user = null): array
     {
-        return [];
+        $manager = app(LegalContentManager::class);
+
+        return [
+            'content' => $manager->content('terms'),
+            'title' => $manager->title('terms') ?? 'AGB',
+        ];
     }
 }

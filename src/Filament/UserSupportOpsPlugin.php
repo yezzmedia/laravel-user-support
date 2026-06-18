@@ -6,6 +6,8 @@ namespace YezzMedia\UserSupport\Filament;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use YezzMedia\UserSupport\Filament\Pages\LegalContentEditPage;
+use YezzMedia\UserSupport\Filament\Pages\LegalContentListPage;
 use YezzMedia\UserSupport\Filament\Pages\TicketDetailPage;
 use YezzMedia\UserSupport\Filament\Pages\TicketListPage;
 
@@ -26,6 +28,8 @@ final class UserSupportOpsPlugin implements Plugin
         $panel->pages([
             TicketListPage::class,
             TicketDetailPage::class,
+            LegalContentListPage::class,
+            LegalContentEditPage::class,
         ]);
     }
 
