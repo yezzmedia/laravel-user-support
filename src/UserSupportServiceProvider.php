@@ -24,7 +24,7 @@ class UserSupportServiceProvider extends PackageServiceProvider
             ->hasMigration('0001_create_support_tickets_table')
             ->hasMigration('0002_create_support_ticket_replies_table')
             ->hasMigration('0003_create_legal_contents_table')
-            ->runsMigrations()
+            ->runsMigrations();
     }
 
     public function registeringPackage(): void
