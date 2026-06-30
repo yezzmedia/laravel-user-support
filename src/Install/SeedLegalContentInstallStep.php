@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace YezzMedia\UserSupport\Install;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 use YezzMedia\Foundation\Data\InstallContext;
 use YezzMedia\Foundation\Install\InstallStep;
 use YezzMedia\UserSupport\Models\LegalContent;
@@ -28,6 +29,10 @@ final class SeedLegalContentInstallStep implements InstallStep
 
     public function shouldRun(InstallContext $context): bool
     {
+        if (! Schema::hasTable('legal_contents')) {
+            return false;
+        }
+
         return LegalContent::count() === 0;
     }
 
