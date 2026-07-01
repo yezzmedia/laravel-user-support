@@ -1,6 +1,6 @@
 {
     "name": "yezzmedia/laravel-user-support",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": "User-facing support ticket system with public contact form, legal pages, and operator-managed conversations for the Yezz Media Laravel platform.",
     "type": "library",
     "license": "MIT",
