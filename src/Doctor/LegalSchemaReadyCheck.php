@@ -38,6 +38,6 @@ final class LegalSchemaReadyCheck implements DoctorCheck
             return $this->result('warning', 'The legal_contents table is missing. Run the migrations.', true);
         }
 
-        return $this->result('ok', 'The legal_contents table exists.', false);
+        return $this->result('passed', 'The legal_contents table exists.', false);
     }
 }

@@ -38,6 +38,6 @@ final class LegalContentSeedCheck implements DoctorCheck
             return $this->result('warning', 'No legal content found. Run the seed install step.', false);
         }
 
-        return $this->result('ok', 'Legal content has been seeded.', false);
+        return $this->result('passed', 'Legal content has been seeded.', false);
     }
 }
