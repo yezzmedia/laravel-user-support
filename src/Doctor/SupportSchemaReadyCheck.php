@@ -38,6 +38,6 @@ final class SupportSchemaReadyCheck implements DoctorCheck
             return $this->result('warning', 'Support ticket tables are not ready. Run the migrations.', true);
         }
 
-        return $this->result('ok', 'Support ticket tables are ready.', false);
+        return $this->result('passed', 'Support ticket tables are ready.', false);
     }
 }

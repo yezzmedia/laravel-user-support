@@ -11,7 +11,7 @@ it('passes schema check when support_tickets table exists', function () {
     $result = app(SupportSchemaReadyCheck::class)->run();
 
     expect($result)->toBeInstanceOf(DoctorResult::class)
-        ->and($result->status)->toBe('ok')
+        ->and($result->status)->toBe('passed')
         ->and($result->isBlocking)->toBeFalse()
         ->and($result->key)->toBe('user-support.schema.ready');
 });
@@ -35,7 +35,7 @@ it('passes config check when config file exists', function () {
     $result = app(SupportConfigPublishedCheck::class)->run();
 
     expect($result)->toBeInstanceOf(DoctorResult::class)
-        ->and($result->status)->toBe('ok')
+        ->and($result->status)->toBe('passed')
         ->and($result->isBlocking)->toBeFalse()
         ->and($result->key)->toBe('user-support.config.published');
 });

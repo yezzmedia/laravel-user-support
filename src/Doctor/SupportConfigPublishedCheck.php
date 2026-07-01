@@ -37,6 +37,6 @@ final class SupportConfigPublishedCheck implements DoctorCheck
             return $this->result('warning', 'User-support config has not been published.', false);
         }
 
-        return $this->result('ok', 'User-support config is published.', false);
+        return $this->result('passed', 'User-support config is published.', false);
     }
 }
